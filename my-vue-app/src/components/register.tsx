@@ -16,7 +16,7 @@ const Register: React.FC = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5136/register', {
+      const response = await fetch('http://localhost:5136/swagger/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
