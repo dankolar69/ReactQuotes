@@ -8,7 +8,7 @@ interface Quote {
 }
 
 const Quotes: React.FC = () => {
-  const { token } = useContext(AuthContext);
+  const { token, logout } = useContext(AuthContext);
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [tag, setTag] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -44,7 +44,7 @@ const Quotes: React.FC = () => {
     fetchQuotes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tag]);
-
+  
   const handleRandomQuote = async () => {
     try {
       const query = tag ? `?tag=${encodeURIComponent(tag)}` : '';
@@ -58,6 +58,8 @@ const Quotes: React.FC = () => {
 
       if (response.ok) {
         const quote = await response.json();
+        const data = await response.json();
+        const token = data.accessToken;
         alert(`Náhodný citát: "${quote.content}" - ${quote.author}`);
       } else {
         const errorData = await response.json();
@@ -68,6 +70,9 @@ const Quotes: React.FC = () => {
       alert('Chyba při získávání náhodného citátu. Zkuste to prosím znovu.');
     }
   };
+  
+
+
 
   return (
     <div>
@@ -88,6 +93,8 @@ const Quotes: React.FC = () => {
           </li>
         ))}
       </ul>
+     
+      <button onClick={logout}>Odhlásit se</button>
     </div>
   );
 };

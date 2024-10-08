@@ -10,7 +10,7 @@ const Login: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:5136/api/auth/login', {
+      const response = await fetch('http://localhost:5136/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -20,15 +20,20 @@ const Login: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        const token = data.token; // Ujistěte se, že backend vrací token
-        if (token) {
-          login(token);
-          alert('Přihlášení úspěšné');
-          navigate('/quotes'); // Přesměrování po úspěšném přihlášení
-        }
+        const token = data.accessToken; // Backend by měl vracet accessToken
+
+        // Uložení tokenu do localStorage
+        localStorage.setItem('userToken', JSON.stringify(token));
+
+        // Uložení přihlášeného uživatele do localStorage
+        localStorage.setItem('userData', JSON.stringify(data));
+
+        // Navigace na chráněnou stránku po přihlášení (např. dashboard)
+        login(token);
+        navigate('/quotes');
       } else {
         const errorData = await response.json();
-        alert(`Přihlášení selhalo: ${errorData}`);
+        alert(`Přihlášení selhalo: ${errorData.message}`);
       }
     } catch (error) {
       console.error('Chyba při přihlášení:', error);

@@ -16,29 +16,26 @@ const Register: React.FC = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5136/swagger/register', {
+      const response = await fetch('http://localhost:5136/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, confirmPassword }),
+        body: JSON.stringify({ email, password }),
       });
 
+      console.log(response);
       if (response.ok) {
         const data = await response.json();
-        const token = data.token; // Ujistěte se, že backend vrací token po registraci
-        if (token) {
-          login(token);
-          alert('Registrace úspěšná');
-          navigate('/quotes'); // Přesměrování po úspěšné registraci
-        }
-      } else {
-        const errorData = await response.json();
-        alert(`Registrace selhala: ${errorData}`);
+        console.log(data);
+        const token = data.acccesstoken; // Ujistěte se, že backend vrací token po registraci
+        console.log(token);
+        login(token);
+        navigate('/quotes');
       }
-    } catch (error) {
+    } catch (error) {/*
       console.error('Chyba při registraci:', error);
-      alert('Registrace selhala. Zkuste to prosím znovu.');
+      alert('Registrace selhala. Zkuste to prosím znovu.');*/
     }
   };
 
